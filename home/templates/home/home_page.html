@@ -1,0 +1,472 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<!-- <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"> -->
+{% endblock extra_css %}
+
+{% block content %}
+
+<!-- Page Heading -->
+<!-- <a class="dropdown-item" href="{% url 'login' %}">Login</a> -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <!-- Minimum Hours (Montly) -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Minimum Hours (Month)</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ minimumHoursTotal }}</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Minimum Hours (Pay Period)</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ minimumHoursPayPeriod }}</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Minimum Hours (Week)</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"> 40 </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Remaining Hours -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Remaining Hours (Month)
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">TBD</div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Remaining Hours (Pay Period)</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">TBD</div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Remaining Hours (Week)</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">TBD</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overall Task Authorization Utilization -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Overall Task Authorization Utilization</div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                            </div>
+                            <div class="col">
+                                <div class="progress progress-sm mr-2">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%"
+                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Billable Target Progress
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                            </div>
+                            <div class="col">
+                                <div class="progress progress-sm mr-2">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                        aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PTO Balance -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">PTO Balance</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"> {{ user.profile.pto_balance }} </div>
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Billable Target Progress
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                            </div>
+                            <div class="col">
+                                <div class="progress progress-sm mr-2">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%"
+                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <!-- Area Chart -->
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Calendar</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                {% include "home/calendar_tui.html" %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Today's TOL Record -->
+    <div class="col-xl-4 col-lg-2">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Today's TOL Record (MM/DD)</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="chargeCodeToday" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Telework (Y/N)</th>
+                                <th>Hours</th>
+                                <th>Tax Code</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>TOTAL: </th>
+                                <th> --- </th>
+                                <th> {{ hoursSpentToday }} </th>
+                                <th> --- </th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for key, value in taskRecordToday.items %}
+                                <tr>
+                                    <td> {{ key }} </td>
+                                    <td> TBD </td>
+                                    <td> {{ value }}</td>
+                                    <td>HAWA</td>
+                                </tr>
+                            {% endfor %}
+                            <!-- <tr>
+                                <td class="text-danger">A</td>
+                                <td>Y</td>
+                                <td>00.50</td>
+                                <td>HAWA</td>
+                            </tr>
+                            <tr>
+                                <td class="text-warning">B</td>
+                                <td>Y</td>
+                                <td>06.00</td>
+                                <td>HAWA</td>
+                            </tr>
+                            <tr>
+                                <td class="text-primary">C</td>
+                                <td>N</td>
+                                <td>02.00</td>
+                                <td>HAWA</td>
+                            </tr>
+                            <tr>
+                                <td class="text-success">D</td>
+                                <td>Y</td>
+                                <td>0.25</td>
+                                <td>HAWA</td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <!-- Content Column -->
+
+    <div class="col-lg-6 mb-4">
+
+        <!-- Active Task Authorizations -->
+        <!-- <div class="col-xl-4 col-lg-2"> -->
+        <div class="card shadow mb-4" id="active-chargecodes">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Active Task Authorizations</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" id="create-chargecode">Create New...</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Allocated</th>
+                                <th>Spent</th>
+                                <th>Remaining</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Tax Code</th>
+                                <th>Command</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Allocated</th>
+                                <th>Spent</th>
+                                <th>Remaining</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Tax Code</th>
+                                <th>Command</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for task in taskAuthorization %}
+                                <tr>
+                                <td style="color: {{ task.charge_code.color }};" id_code={{ task.charge_code.id }}> {{ task.charge_code.name }} {% if task.charge_code.personal_list %}<b>*</b>{% endif %}</td>
+                                    <td> {{ task.hours_allocated }} </td>
+                                    <td> {{ task.hours_spent }} </td>
+                                    <td> {{ task.hours_remaining }} </td>
+                                    <td> {{ task.start_date }} </td>
+                                    <td> {{ task.end_date }} </td>
+                                    <td> {{ task.tax_code }}</td>
+                                    <td>
+                                        <i class="fas fa-cogs" id_code={{ task.charge_code.id }}></i>
+                                        <i class="fas fa-trash" id_code={{ task.charge_code.id }} style="color: red;"></i>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text Placeholder -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Placeholder</h6>
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+                        src="" alt="">
+                </div>
+                <p>
+                    {% for event in events %}
+                        {{ event.name }}
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lg-6 mb-4">
+    
+        <!-- Project Card Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Individual Task Authorization Utilization</h6>
+            </div>
+            <div class="card-body">
+                {% for task in taskAuthorization %}
+                    <h4 class="small font-weight-bold">{{ task.charge_code.name }}<span class="float-right">{{ task.hours_percentage }}%</span></h4>
+                    <div class="progress mb-4">
+                    <div class="progress-bar" role="progressbar" style="width: {{ task.hours_percentage }}%; background-color: {{ task.charge_code.color }} !important" aria-valuenow="{{ task.hours_percentage }}" aria-valuemin="0"
+                            aria-valuemax="100"></div>
+                    </div>
+                {% endfor %}
+                <!-- <h4 class="small font-weight-bold">Charge Code A <span class="float-right">20%</span></h4>
+                <div class="progress mb-4">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <h4 class="small font-weight-bold">Charge Code B <span class="float-right">40%</span></h4>
+                <div class="progress mb-4">
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="40"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <h4 class="small font-weight-bold">Charge Code C <span class="float-right">60%</span></h4>
+                <div class="progress mb-4">
+                    <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0"
+                        aria-valuemax="100"></div>
+                </div>
+                <h4 class="small font-weight-bold">Charge Code D <span class="float-right">Complete!</span></h4>
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                </div> -->
+            </div>
+        </div>
+    
+    </div>
+    
+</div>
+
+<!-- Task Authorization Modal -->
+<div id="chargeCodeModal" class="modal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Task Authorization Registry</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" id="chargeCodeModalClose">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Modal
+                <form action="{% url 'create-chargecode' %}" method="post" id="chargeCodeForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <div class="form-input">
+                                <label for="name">Name</label>
+                                <input type="text" name="name" id="ta_name" class="form-control" required="required"
+                                    autofocus="autofocus">
+                            </div>
+                            <!-- TODO: Chagne code to drop down -->
+                            <!-- TODO: Prepend new -->
+                            <div class="form-input">
+                                <label for="code">Code</label>
+                                <input type="text" name="code" id="ta_ccId" class="form-control" required="required"
+                                    autofocus="autofocus">
+                            </div>
+                            <div class="form-input">
+                                <label for="hours_allocated">Hours Allocated</label>
+                                <p>
+                                    <input type="number" name="ta_hours_allocated" id="id_hours_allocated" class="form-control" value="0" required="required" min=0 max=9999 step=0.25>
+                                </p>
+                            </div>
+                            <div class="form-input">
+                                <label for="hours_spent">Hours Spent</label>
+                                <p>
+                                    <input type="number" name="ta_hours_spent" id="ta_hours_spent" class="form-control" value="0" min=0 max=9999 step=0.25>
+                                </p>
+                            </div>
+                            <div class="form-input">
+                                <label for="start_date">Start Date</label>
+                                <p>
+                                    <input type="date" name="ta_start_date" id="ta_start_date" class="form-control">
+                                </p>
+                            </div>
+                            <div class="form-input">
+                                <label for="end_date">End Date</label>
+                                <p>
+                                    <input type="date" name="ta_end_date" id="ta_end_date" class="form-control">
+                                </p>
+                            </div>
+                            <!-- <div class="form-input">
+                                <label for="tax_code">Tax Code</label>
+                                <p>
+                                    <input type="text" name="tax_code" id="id_tax_code" class="form-control" value="HAWA">
+                                </p>
+                            </div> -->
+                            <!-- <div class="form-input">
+                                <label for="personal_list">Add To Your Personal List?</label>
+                                <p>
+                                    <input type="checkbox" name="personal_list" id="id_personal_list" class="form-control" value="HAWA" checked>
+                                </p>
+                            </div> -->
+                            <!-- <div class="form-input">
+                                <label for="color">Color</label>
+                                <p>
+                                    <input type="text" name="color" id="id_color" class="form-control" value="#ff0000">
+                                </p>
+                            </div> -->
+                            <div class="form-input">
+                                <label for="ta_file">TA File Upload</label>
+                                <p>
+                                    <input type="file" name="ta_file" id="ta_file" class="form-control">
+                                </p>
+                            </div>
+                            <div class="form-input">
+                                <input type="hidden" name="id_ta" id="id_ta" class="form-control" value=0>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" value="Submit" class="btn btn-primary btn-block">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<!-- Page level plugins -->
+<script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+<script src="{% static 'js/chargeCode.js' %}"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script> -->
+
+{% endblock extra_js %}

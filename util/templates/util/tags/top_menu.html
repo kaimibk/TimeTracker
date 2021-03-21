@@ -1,0 +1,18 @@
+{% load timetracker_tags wagtailcore_tags %}
+{% get_site_root as site_root %}
+
+{# Implementation of bootstrap theme dropdown menu - shows top level links and their children #}
+{% for menu in menuitems %}
+  {% check_page_view_restrictions menu as visible %}
+  {% if visible %}
+  <div class="sidebar-heading">
+      {{menu.title}}
+  </div>
+    {% for page in menu.get_children %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{page.url}}">
+          {% if page.search_description %}{{ page.search_description | safe}} {{ page.title }}{% else %}{{ page.title }}{% endif %}</a>
+      </li>
+    {% endfor %}
+  {% endif %}
+{% endfor %}

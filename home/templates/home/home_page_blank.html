@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block extra_css %}
+<!-- <link rel="stylesheet" href="{% static 'css/welcome_page.css' %}"> -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" /> -->
+{% endblock extra_css %}
+
+{% block content %}
+
+<!-- Page Heading -->
+
+<h1 class="h3 mb-2 text-gray-800">{{ page.title }}</h1>
+<p class="mb-4">
+    {{ page.description | richtext }}
+</p>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary"> {{ page.subheader | richtext }}</h6>
+    </div>
+    <div class="card-body">
+        {{ page.content | richtext }}
+    </div>
+</div>
+{% endblock content %}
