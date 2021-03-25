@@ -14,12 +14,12 @@ jQuery(document).ready(function ($) {
     }
 
     $('#create-taskauthorization').click(function () {
-        console.log(("Create Charge Code Modal..."))
+        console.log(("Create Task Auth Modal..."))
         taskAuthorizationModal.style.display = "block";
     });
 
     $('#active-taskauthorizations .fa-cogs').click(function (e) {
-        console.log(("Edit Charge Code..."))
+        console.log(("Edit Task Authorization..."))
         var item = $(this),
             target = $(e.target);
         var id_code = target.attr("ta_ccId");

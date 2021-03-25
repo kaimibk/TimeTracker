@@ -172,11 +172,12 @@ def create_taskauth(request):
     idx = request.POST.get("id_taskauthorization")
 
     params = {
-        "hours_allocated": float(request.POST.get("hours_allocated")),
-        "hours_spent": float(request.POST.get("hours_spent")),
-        "start_date": request.POST.get("start_date"),
-        "end_date": request.POST.get("end_date"),
-        "tax_code": request.POST.get("tax_code"),
+        "user": request.user,
+        "hours_allocated": float(request.POST.get("ta_hours_allocated")),
+        "hours_spent": float(request.POST.get("ta_hours_spent")),
+        "start_date": request.POST.get("ta_start_date"),
+        "end_date": request.POST.get("ta_end_date"),
+        #"tax_code": request.POST.get("ta_tax_code"),
         "ta_file": request.POST.get("ta_file"),
     }
 

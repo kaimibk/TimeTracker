@@ -56,17 +56,41 @@ class HomePage(Page):
         today = datetime.now()
         context["taskAuthorization"] = TaskAuthorization.objects.filter(end_date__gte=today)
         month_weekdays = get_weekdays(today.year, today.month)
-        context["minimumHoursTotal"] = len(month_weekdays) * 8
+        minimumHoursTotal = len(month_weekdays) * 8
+        context["minimumHoursTotal"] = minimumHoursTotal
         # context["holidaysAll"] = CorporateHolidays(years=today.year)
         
+        payPeriod = 0
         if today.day <= 15:
             payperiod_weekdays = [(i, j) for i,j in month_weekdays if i<= 15]
+            payPeriod = 1 #First Half
         else:
             payperiod_weekdays = [(i, j) for i,j in month_weekdays if i > 15]
-            
-        context["minimumHoursPayPeriod"] = len(payperiod_weekdays) * 8
+            payPeriod = 2 #Second Halfs
+        
+        minimumHoursPayPeriod = len(payperiod_weekdays) * 8
+        context["minimumHoursPayPeriod"] = minimumHoursPayPeriod
         context["holidaysMonth"] = [i for i, j in CorporateHolidays(years=today.year).items() if i.month == today.month]
         
+        events_month = Event.objects.filter(
+            start__year=today.date().year,
+            start__month=today.date().month
+        )
+
+        if payPeriod == 1:
+            events_pp = Event.objects.filter(
+                start__year=today.date().year,
+                start__month=today.date().month, 
+                start__day__lte=15,
+
+            )
+        else:
+            events_pp = Event.objects.filter(
+                start__year=today.date().year,
+                start__month=today.date().month, 
+                start__day__gt=15,
+
+            )
 
         events_today = Event.objects.filter(
             start__year=today.date().year,
@@ -74,8 +98,13 @@ class HomePage(Page):
             start__day=today.date().day
         )
 
+
         task_auth_today = {}
+        task_auth_month = {}
+        task_auth_pp = {}
         hours_today = 0
+        hours_month = 0
+        hours_pp = 0
         
         for event in events_today:
             # task_auth_today.add(event.task_authorization)
@@ -87,12 +116,33 @@ class HomePage(Page):
             else:
                 task_auth_today[key] = event.delta_time
 
+        for em in events_month:
+            key = em.task_authorization.charge_code.name
+            hours_month += em.delta_time
+
+            if task_auth_month.get(key):
+                task_auth_month[key] += em.delta_time
+            else:
+                task_auth_month[key] = em.delta_time
+
+        for epp in events_pp:
+            key = epp.task_authorization.charge_code.name
+            hours_pp += epp.delta_time
+
+            if task_auth_pp.get(key):
+                task_auth_pp[key] += epp.delta_time
+            else:
+                task_auth_pp[key] = epp.delta_time
+
         # For every task in today, return the hours spent
-
         context["taskRecordToday"] = task_auth_today
-
         context["hoursSpentToday"] = hours_today #sum([i for i in task_auth_today.values()])
-        
+
+        context["taskRecordMonth"] = task_auth_month
+        context["hoursSpentMonth"] = hours_month
+        context["hoursRemainingMonth"] = minimumHoursTotal - hours_month
+
+        context["hoursRemainingPayPeriod"] = minimumHoursPayPeriod - hours_pp
         # _test = sum([float(task.hours_spent) for task in TaskAuthorization.objects.filter(end_date__gte=today)])
         # print(_test)
 
@@ -151,6 +201,7 @@ class ChargeCode(models.Model):
     dragBgColor = models.CharField(max_length=10, null=True, blank=True)
     borderColor = models.CharField(max_length=10, null=True, blank=True)
     personal_list = models.BooleanField(default=False, null=True, blank=True)
+    
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
@@ -171,6 +222,7 @@ class TaskAuthorization(models.Model):
     end_date = models.DateField(null=True, blank=True)
     ta_file = models.FileField(null=True, blank=True)
     charge_code = models.ForeignKey(ChargeCode, null=True, blank=True, on_delete=models.CASCADE)
+    is_billable = models.BooleanField(default=False, null=True, blank=True)
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
@@ -197,6 +249,9 @@ class Category(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name_plural = 'Categories'
     
 @register_snippet
 class Event(models.Model):

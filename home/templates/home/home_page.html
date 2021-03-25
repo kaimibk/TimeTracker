@@ -47,9 +47,9 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Remaining Hours (Month)
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">TBD</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ hoursRemainingMonth }}</div>
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Remaining Hours (Pay Period)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">TBD</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{hoursRemainingPayPeriod}}</div>
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Remaining Hours (Week)</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">TBD</div>
                     </div>
@@ -115,7 +115,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col-auto">
                                 <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                            </div>
+                            </div>Overall
                             <div class="col">
                                 <div class="progress progress-sm mr-2">
                                     <div class="progress-bar bg-info" role="progressbar" style="width: 50%"
@@ -239,7 +239,7 @@
 
         <!-- Active Task Authorizations -->
         <!-- <div class="col-xl-4 col-lg-2"> -->
-        <div class="card shadow mb-4" id="active-chargecodes">
+        <div class="card shadow mb-4" id="active-taskauthorizations">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Active Task Authorizations</h6>
@@ -250,7 +250,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                         <div class="dropdown-header">Dropdown Header:</div>
-                        <a class="dropdown-item" id="create-chargecode">Create New...</a>
+                        <a class="dropdown-item" id="create-taskauthorization">Create New...</a>
                         <a class="dropdown-item" href="#">Another action</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Something else here</a>
@@ -297,7 +297,7 @@
                                     <td> {{ task.tax_code }}</td>
                                     <td>
                                         <i class="fas fa-cogs" id_code={{ task.charge_code.id }}></i>
-                                        <i class="fas fa-trash" id_code={{ task.charge_code.id }} style="color: red;"></i>
+                                        <i class="fas fa-trash" id_code={{ task.id }} style="color: red;"></i>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -370,18 +370,18 @@
 </div>
 
 <!-- Task Authorization Modal -->
-<div id="chargeCodeModal" class="modal" tabindex="-1">
+<div id="taskAuthorizationModal" class="modal" tabindex="-1">
     <div class="modal-dialog" role="document">
         <!-- Modal content -->
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Task Authorization Registry</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close" id="chargeCodeModalClose">
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" id="taskAuthorizationModalClose">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">Modal
-                <form action="{% url 'create-chargecode' %}" method="post" id="chargeCodeForm">
+                <form action="{% url 'create-taskAuth' %}" method="post" id="taskAuthorizationForm">
                     {% csrf_token %}
                     <div class="form-group">
                         <div class="form-label-group">
@@ -467,6 +467,7 @@
 <!-- Page level custom scripts -->
 <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
 <script src="{% static 'js/chargeCode.js' %}"></script>
+<script src="{% static 'js/taskAuthorization.js' %}"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script> -->
 
 {% endblock extra_js %}
