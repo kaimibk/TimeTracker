@@ -54,7 +54,9 @@ class HomePage(Page):
         # TODO: filter on payperiod / calendar month
         # TODO: context should inherit/relate to year/month/pay period objects.
         today = datetime.now()
-        context["taskAuthorization"] = TaskAuthorization.objects.filter(end_date__gte=today)
+
+        activeTaskAuths = TaskAuthorization.objects.filter(end_date__gte=today)
+        context["taskAuthorization"] = activeTaskAuths
         month_weekdays = get_weekdays(today.year, today.month)
         minimumHoursTotal = len(month_weekdays) * 8
         context["minimumHoursTotal"] = minimumHoursTotal
@@ -105,6 +107,8 @@ class HomePage(Page):
         hours_today = 0
         hours_month = 0
         hours_pp = 0
+        total_ta_allocated = 0
+        total_ta_hours_spent = 0
         
         for event in events_today:
             # task_auth_today.add(event.task_authorization)
@@ -134,6 +138,10 @@ class HomePage(Page):
             else:
                 task_auth_pp[key] = epp.delta_time
 
+        for ta in activeTaskAuths:
+            total_ta_allocated += ta.hours_allocated
+            total_ta_hours_spent += ta.hours_spent
+
         # For every task in today, return the hours spent
         context["taskRecordToday"] = task_auth_today
         context["hoursSpentToday"] = hours_today #sum([i for i in task_auth_today.values()])
@@ -143,6 +151,8 @@ class HomePage(Page):
         context["hoursRemainingMonth"] = minimumHoursTotal - hours_month
 
         context["hoursRemainingPayPeriod"] = minimumHoursPayPeriod - hours_pp
+        context["projectedTaskAuth"] = round((total_ta_allocated / minimumHoursTotal)*100,2)
+        context["totalUtilTaskAuth"] = round((total_ta_hours_spent/total_ta_allocated)*100, 2)
         # _test = sum([float(task.hours_spent) for task in TaskAuthorization.objects.filter(end_date__gte=today)])
         # print(_test)
 
