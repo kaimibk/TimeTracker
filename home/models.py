@@ -53,6 +53,10 @@ class HomePage(Page):
         context = super().get_context(request)
         # TODO: filter on payperiod / calendar month
         # TODO: context should inherit/relate to year/month/pay period objects.
+        # TODO: Remove PTO from Display
+        # TODO: Add BAH Metric, fix billable metric
+        # TODO: Need to add G#'s to calendar drop downs
+        
         today = datetime.now()
 
         activeTaskAuths = TaskAuthorization.objects.filter(end_date__gte=today)
@@ -109,6 +113,7 @@ class HomePage(Page):
         hours_pp = 0
         total_ta_allocated = 0
         total_ta_hours_spent = 0
+        total_ta_spent_billable = 0
         
         for event in events_today:
             # task_auth_today.add(event.task_authorization)
@@ -141,6 +146,9 @@ class HomePage(Page):
         for ta in activeTaskAuths:
             total_ta_allocated += ta.hours_allocated
             total_ta_hours_spent += ta.hours_spent
+
+            if ta.is_billable == True:
+                total_ta_spent_billable += ta.hours_spent
 
         # For every task in today, return the hours spent
         context["taskRecordToday"] = task_auth_today
