@@ -72,7 +72,7 @@ class HomePage(Page):
             payPeriod = 1 #First Half
         else:
             payperiod_weekdays = [(i, j) for i,j in month_weekdays if i > 15]
-            payPeriod = 2 #Second Halfs
+            payPeriod = 2 #Second Half
         
         minimumHoursPayPeriod = len(payperiod_weekdays) * 8
         context["minimumHoursPayPeriod"] = minimumHoursPayPeriod
@@ -160,7 +160,8 @@ class HomePage(Page):
 
         context["hoursRemainingPayPeriod"] = minimumHoursPayPeriod - hours_pp
         context["projectedTaskAuth"] = round((total_ta_allocated / minimumHoursTotal)*100,2)
-        context["totalUtilTaskAuth"] = round((total_ta_hours_spent/total_ta_allocated)*100, 2)
+        if total_ta_allocated != 0:
+            context["totalUtilTaskAuth"] = round((total_ta_hours_spent/total_ta_allocated)*100, 2)
         # _test = sum([float(task.hours_spent) for task in TaskAuthorization.objects.filter(end_date__gte=today)])
         # print(_test)
 

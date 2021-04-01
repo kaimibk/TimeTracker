@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import Http404, JsonResponse, HttpResponse
 from home.models import Event, ChargeCode, HomePage, Category, TaskAuthorization
+from account.models import Profile
 import requests
 from datetime import datetime
 from django.utils import timezone
@@ -170,9 +171,9 @@ def update_event(request):
 def create_taskauth(request):
 
     idx = request.POST.get("id_taskauthorization")
-
+    user = Profile.objects.get(user=request.user)
     params = {
-        "user": request.user,
+        "user": user,
         "hours_allocated": float(request.POST.get("ta_hours_allocated")),
         "hours_spent": float(request.POST.get("ta_hours_spent")),
         "start_date": request.POST.get("ta_start_date"),
