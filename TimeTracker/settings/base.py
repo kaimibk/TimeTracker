@@ -28,6 +28,11 @@ INSTALLED_APPS = [
     'search',
     'account',
     'util',
+    'chargecode',
+    'taskauthorization',
+    'location',
+    'category',
+    'event',
     
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',

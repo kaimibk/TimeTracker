@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.http import Http404, JsonResponse, HttpResponse
-from home.models import Event, ChargeCode, HomePage, Category, TaskAuthorization
+from home.models import HomePage
+from event.models import Event
+from chargecode.models import ChargeCode
+from category.models import Category
+from taskauthorization.models import TaskAuthorization
 import requests
 from datetime import datetime
 from django.utils import timezone

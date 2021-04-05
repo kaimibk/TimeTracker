@@ -12,6 +12,8 @@ import calendar
 import holidays
 from django.forms.models import model_to_dict
 from account.models import Profile
+from taskauthorization.models import TaskAuthorization
+from event.models import Event
 
 # print weekday_count
 def get_weekdays(year, month):
@@ -160,7 +162,8 @@ class HomePage(Page):
 
         context["hoursRemainingPayPeriod"] = minimumHoursPayPeriod - hours_pp
         context["projectedTaskAuth"] = round((total_ta_allocated / minimumHoursTotal)*100,2)
-        context["totalUtilTaskAuth"] = round((total_ta_hours_spent/total_ta_allocated)*100, 2)
+        if total_ta_allocated >= 1:
+            context["totalUtilTaskAuth"] = round((total_ta_hours_spent/total_ta_allocated)*100, 2)
         # _test = sum([float(task.hours_spent) for task in TaskAuthorization.objects.filter(end_date__gte=today)])
         # print(_test)
 
@@ -206,98 +209,3 @@ class TablesPage(Page):
             context["objs"] = some_list
         context["model"] = self.dbModel
         return context
-
-
-@register_snippet
-class ChargeCode(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.ManyToManyField(Profile)
-    name = models.CharField(max_length=120)
-    code = models.CharField(max_length=60)
-    color = models.CharField(max_length=10, null=True, blank=True)
-    bgColor = models.CharField(max_length=10, null=True, blank=True)
-    dragBgColor = models.CharField(max_length=10, null=True, blank=True)
-    borderColor = models.CharField(max_length=10, null=True, blank=True)
-    personal_list = models.BooleanField(default=False, null=True, blank=True)
-    
-
-    def save_model(self, request, obj, form, change):
-        obj.user = request.user
-        super().save_model(request, obj, form, change)
-
-    def __str__(self):
-        return self.name
-    
-@register_snippet
-class TaskAuthorization(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    hours_allocated = models.FloatField(default=1.0)
-    hours_spent = models.FloatField(null=True, blank=True) #not sure
-    hours_remaining = models.FloatField(null=True, blank=True) #not sure
-    hours_percentage = models.FloatField(null=True, blank=True) #not sure
-    billable_percentage = models.FloatField(null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True)
-    end_date = models.DateField(null=True, blank=True)
-    ta_file = models.FileField(null=True, blank=True)
-    charge_code = models.ForeignKey(ChargeCode, null=True, blank=True, on_delete=models.CASCADE)
-    is_billable = models.BooleanField(default=False, null=True, blank=True)
-
-    def save_model(self, request, obj, form, change):
-        obj.user = request.user
-        super().save_model(request, obj, form, change)
-
-    # def hours_remaining(self):
-    #     return self.hours_allocated - self.hours_spent
-
-    # def hours_percentage(self):
-    #     return self.hours_spent / self. hours_allocated
-       
-    def __str__(self):
-        return f"{self.charge_code.name}_{self.start_date}_{self.end_date}_{self.user.email}"
-
-@register_snippet
-class TaxLocation(models.Model):
-    abbreviation = models.CharField(max_length=10, null=True, blank=True)
-    state = models.CharField(max_length=25, null=True, blank=True)
-    def __str__(self):
-        return self.abbreviation
-    
-@register_snippet
-class Category(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        verbose_name_plural = 'Categories'
-    
-@register_snippet
-class Event(models.Model):
-    id = models.CharField(max_length=255, primary_key=True)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
-    title = models.CharField(max_length=255, null=True, blank=True)
-    body = models.CharField(max_length=255, null=True, blank=True)
-    isAllDay = models.BooleanField(default=False)
-    start = models.DateTimeField(null=True, blank=True)
-    end = models.DateTimeField(null=True, blank=True)
-    delta_time = models.FloatField(null=True, blank=True)
-    # TODO: change to relation
-    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE)
-    dueDateClass = models.CharField(max_length=25, null=True, blank=True)    
-    # TODO: Change to relation
-    # charge_code = models.ForeignKey(ChargeCode, null=True, blank=True, on_delete=models.CASCADE)
-    task_authorization = models.ForeignKey(TaskAuthorization, null=True, blank=True, on_delete=models.CASCADE)
-
-    location = models.CharField(max_length=100, null=True, blank=True)
-    # TODO: Change to choice fields
-    event_type = models.CharField(null=True, blank=True, max_length=100)
-    notes = RichTextField(null=True, blank=True)
-    #telework = models.BooleanField(default=False, null=True, blank=True)
-    #tax_location = foreign key to TaxLocation
-    def __str__(self):
-        return self.title
